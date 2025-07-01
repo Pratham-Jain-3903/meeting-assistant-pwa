@@ -1,0 +1,203 @@
+{
+  "name": "AI Meeting Assistant PWA",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true,
+      "username": "vscode",
+      "userUid": "automatic",
+      "userGid": "automatic"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "ppa": true,
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true,
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": true,
+      "azureDnsAutoDetection": true,
+      "installDockerBuildx": true,
+      "version": "latest",
+      "dockerDashComposeVersion": "v2"
+    }
+  },
+
+  // Configure tool-specific properties
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Python extensions
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.flake8",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+
+        // JavaScript/TypeScript/React extensions
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "dbaeumer.vscode-eslint",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-json",
+
+        // Next.js and React specific
+        "ms-vscode.vscode-react-native",
+        "msjsdiag.vscode-react-native",
+
+        // Docker and containers
+        "ms-vscode-remote.remote-containers",
+        "ms-azuretools.vscode-docker",
+
+        // Git and GitHub
+        "github.vscode-pull-request-github",
+        "github.vscode-github-actions",
+        "github.copilot",
+        "github.copilot-chat",
+
+        // AI and ML extensions
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-toolsai.vscode-jupyter-slideshow",
+
+        // Productivity
+        "streetsidesoftware.code-spell-checker",
+        "gruntfuggly.todo-tree",
+        "ms-vscode.hexeditor",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+
+        // Database
+        "ms-mssql.mssql",
+        "mtxr.sqltools",
+
+        // API testing
+        "humao.rest-client",
+        "rangav.vscode-thunder-client",
+
+        // Performance and debugging
+        "ms-vscode.vscode-js-profile-flame",
+        "webkit.webkit-inspector"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.formatting.provider": "black",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": true,
+        "python.sortImports.args": ["--profile", "black"],
+        
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        "javascript.updateImportsOnFileMove.enabled": "always",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit",
+          "source.organizeImports": "explicit"
+        },
+        
+        "tailwindCSS.includeLanguages": {
+          "typescript": "javascript",
+          "typescriptreact": "javascript"
+        },
+        "tailwindCSS.experimental.classRegex": [
+          ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+          ["classNames\\(([^)]*)\\)", "'([^']*)'"],
+          ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+        ],
+
+        "files.associations": {
+          "*.mdx": "markdown",
+          "*.env.*": "properties"
+        },
+
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        },
+
+        "git.autofetch": true,
+        "git.enableCommitSigning": true,
+
+        "workbench.colorTheme": "Default Dark Modern",
+        "workbench.iconTheme": "vs-seti",
+        
+        "explorer.fileNesting.enabled": true,
+        "explorer.fileNesting.patterns": {
+          "*.ts": "${capture}.js, ${capture}.d.ts.map, ${capture}.d.ts, ${capture}.js.map",
+          "*.tsx": "${capture}.ts, ${capture}.js",
+          "*.env": ".env.*, env.*",
+          "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
+          "README.md": "README.*, readme.*"
+        }
+      }
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally
+  "forwardPorts": [
+    3000,  // Next.js frontend
+    8000,  // FastAPI backend
+    5432,  // PostgreSQL (if used)
+    6379,  // Redis (if used)
+    8080,  // Alternative web port
+    8888   // Jupyter notebooks
+  ],
+
+  "portsAttributes": {
+    "3000": {
+      "label": "Frontend (Next.js)",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Backend (FastAPI)",
+      "onAutoForward": "notify"
+    },
+    "8888": {
+      "label": "Jupyter Lab",
+      "onAutoForward": "ignore"
+    }
+  },
+
+  // Uncomment to connect as root instead
+  // "remoteUser": "root",
+
+  // Use 'postCreateCommand' to run commands after the container is created
+  "postCreateCommand": ".devcontainer/post-create.sh",
+
+  // Use 'postStartCommand' to run commands after the container starts
+  "postStartCommand": ".devcontainer/post-start.sh",
+
+  // Configure container mounts
+  "mounts": [
+    "source=${localWorkspaceFolder}/.devcontainer/data,target=/workspace/data,type=bind,consistency=cached",
+    "source=meeting-assistant-node-modules,target=/workspace/frontend/node_modules,type=volume",
+    "source=meeting-assistant-python-packages,target=/usr/local/lib/python3.11/site-packages,type=volume"
+  ],
+
+  // Environment variables
+  "containerEnv": {
+    "NODE_ENV": "development",
+    "PYTHONPATH": "/workspace/backend",
+    "PYTHONUNBUFFERED": "1",
+    "NEXT_PUBLIC_API_URL": "http://localhost:8000",
+    "NEXT_PUBLIC_WS_URL": "ws://localhost:8000"
+  }
+
+  // Lifecycle scripts - removed non-existent scripts
+  // "initializeCommand": "", // Runs on host before container creation
+  // "onCreateCommand": "", // Runs inside container after creation  
+  // "updateContentCommand": "" // Runs when container config changes
+}
