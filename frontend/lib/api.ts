@@ -1,4 +1,7 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API_BASE_URL =
+  typeof window !== 'undefined' && (window as any).NEXT_PUBLIC_API_URL
+    ? (window as any).NEXT_PUBLIC_API_URL
+    : 'http://localhost:8000'
 
 export interface APIResponse<T> {
   data?: T
@@ -35,7 +38,7 @@ export interface CalendarEvent {
 }
 
 export class APIService {
-  private static async request<T>(
+  protected static async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
