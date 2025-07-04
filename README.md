@@ -20,7 +20,7 @@
 
 A sophisticated Progressive Web App that revolutionizes meeting experiences through real-time AI transcription, intelligent insights, and collaborative features. Built with modern web technologies for seamless cross-platform deployment.
 
-> 🚀 **Live Demo**: Experience the app at [your-demo-url.com](https://your-demo-url.com)
+> 🚀 **Live Demo**: Experience the app at your local device, live demo coming soon (https://localhost:3000)
 
 ## 🎯 Key Features
 
